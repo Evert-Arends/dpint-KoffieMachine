@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KoffieMachineDomain
 {
-    public class Capuccino : Drink
+    public class Capuccino : Drink, ISugar
     {
         public override string Name => "Capuccino";
         public virtual bool HasSugar { get; set; }

@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace KoffieMachineDomain
 {
-    public class Coffee : Drink
+    public class Coffee : Drink, IStrength, ISugar, IMilk
     {
-        
+        private Strength _drinkStrength;
+
         public virtual bool HasSugar { get; set; }
         public virtual Amount SugarAmount { get; set; }
         public virtual bool HasMilk { get; set; }
         public virtual Amount MilkAmount { get; set; }
-        public virtual Strength DrinkStrength { get; set; }
+
+        public Strength DrinkStrength
+        {
+            get => _drinkStrength;
+            set => _drinkStrength = value;
+        }
 
         public override string Name => "Koffie";
 

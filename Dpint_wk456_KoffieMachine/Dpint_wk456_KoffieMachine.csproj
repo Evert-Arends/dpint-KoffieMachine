@@ -69,6 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Factories\AdditionFactory.cs" />
+    <Compile Include="Factories\DrinkFactory.cs" />
+    <Compile Include="Factories\PaymentFactory.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\SelectorExtenders.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -119,7 +122,9 @@
       <Name>KoffieMachineDomain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\10cents.png" />
     <Resource Include="Images\1euro.png" />

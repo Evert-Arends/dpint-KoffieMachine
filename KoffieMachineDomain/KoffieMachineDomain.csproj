@@ -43,9 +43,17 @@
     <Compile Include="Amount.cs" />
     <Compile Include="CafeAuLait.cs" />
     <Compile Include="Capuccino.cs" />
+    <Compile Include="CashPayment.cs" />
+    <Compile Include="IPayment.cs" />
+    <Compile Include="PinPayment.cs" />
+    <Compile Include="Tea.cs" />
     <Compile Include="Coffee.cs" />
     <Compile Include="Drink.cs" />
     <Compile Include="Espresso.cs" />
+    <Compile Include="IDrinkInterface.cs" />
+    <Compile Include="ISugar.cs" />
+    <Compile Include="IMilk.cs" />
+    <Compile Include="IStrength.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strength.cs" />
     <Compile Include="WienerMelange.cs" />
