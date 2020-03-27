@@ -17,9 +17,10 @@ namespace KoffieMachineDomain
         }
         public override void LogStartDrink(ICollection<string> log)
         {
-            base.LogStartDrink(log);
             log.Add($"Setting sugar amount to {Sugar}.");
             log.Add("Adding sugar...");
+            base.LogStartDrink(log);
+
         }
     }
 }

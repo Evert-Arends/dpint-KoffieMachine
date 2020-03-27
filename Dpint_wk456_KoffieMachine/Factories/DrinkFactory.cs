@@ -1,6 +1,8 @@
 ﻿using KoffieMachineDomain;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using TeaAndChocoLibrary;
 
 namespace Dpint_wk456_KoffieMachine.Factories
 {
@@ -9,9 +11,11 @@ namespace Dpint_wk456_KoffieMachine.Factories
         public IEnumerable<string> DrinkNames => _drinks.Keys;
 
         private readonly Dictionary<string, IDrink> _drinks;
-
+        private readonly TeaBlend _defaultTeaBlend;
         public DrinkFactory()
         {
+            var teaBlendFactory = new TeaBlendRepository();
+            _defaultTeaBlend = teaBlendFactory.GetTeaBlend(teaBlendFactory.BlendNames.FirstOrDefault());
             _drinks = new Dictionary<string, IDrink>
             {
                 ["Coffee"] = new StrengthDrinkDecorator(new Coffee(), strength: Strength.Normal),
@@ -19,12 +23,12 @@ namespace Dpint_wk456_KoffieMachine.Factories
                 ["Capuccino"] = new Capuccino(),
                 ["Wiener Melange"] = new WienerMelange(),
                 ["Café au Lait"] = new CafeAuLait(),
-                ["Tea"] = new Tea()
+                ["Tea"] = new TeaAdapter(_defaultTeaBlend)
             };
             //_drinks = MixDrink();
         }
 
-        public IDrink MixDrink(string name, Amount? sugar = null, Amount? milk = null, Strength? strength = null)
+        public IDrink MixDrink(string name, Amount? sugar = null, Amount? milk = null, Strength? strength = null, TeaBlend? blend = null, CustomCoffee coffee=null)
         {
             // GetValueOrDefault == If not null then use or else use given value
             // Can't seem to get around case? Ask Martijn.
@@ -51,42 +55,24 @@ namespace Dpint_wk456_KoffieMachine.Factories
                 case "Café au Lait":
                     drink = new CafeAuLait();
                     break;
-
-                //case "Chocolate":
-                //    drink = new Chocolate();
-                //    break;
-
-                //case "Chocolate Deluxe":
-                //    drink = new ChocolateDeluxe();
-                //    break;
-
-                //case "Tea":
-                //    drink = new Tea(blend.GetValueOrDefault());
-                //    break;
-
-                //case "Irish Coffee":
-                //    drink = new CreamDrinkDecorator(new IrishCoffee());
-                //    break;
-
-                //case "Italian Coffee":
-                //    drink = new CreamDrinkDecorator(new ItalianCoffee());
-                //    break;
-
-                //case "Spanish Coffee":
-                //    drink = new CreamDrinkDecorator(new SpanishCoffee());
-                //    break;
+                case "Tea":
+                    drink = new TeaAdapter(blend.GetValueOrDefault(_defaultTeaBlend));
+                    break;
+                case "Chocolate":
+                    drink = new ChocolateAdapter();
+                    break;
+                case "Chocolate Deluxe":
+                    drink = new ChocolateDeluxeAdapter();
+                    break;
+                case "Custom":
+                    drink = new CustomViewCoffee(coffee);
+                    break;
             }
 
             if (sugar != null)
             {
-                //if (name == "Tea")
-                //{
-                //    ((Tea)drink)?.SetSugar(sugar.GetValueOrDefault(Amount.Normal));
-                //}
-                //else
-                {
-                    drink = new SugarDrinkDecorator(drink, sugar.GetValueOrDefault(Amount.Normal));
-                }
+
+                drink = new SugarDrinkDecorator(drink, sugar.GetValueOrDefault(Amount.Normal));
             }
 
             if (milk != null)

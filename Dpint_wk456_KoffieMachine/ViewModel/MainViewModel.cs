@@ -6,20 +6,46 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Input;
+using TeaAndChocoLibrary;
 
 namespace Dpint_wk456_KoffieMachine.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
         public ObservableCollection<string> LogText { get; }
+        public ObservableCollection<string> TeaBlends
+        {
+            get => new ObservableCollection<string>(_teaBlendFactory.BlendNames);
+        }
         // private readonly payment dingen (vervang payment met zo min mogelijk code refereer naar pay by card of pay by coin).
         private DrinkFactory DrinkFactory { get; }
-        private AdditionFactory AdditionFactory { get; }
         private PaymentFactory PaymentFactory { get; }
+        private TeaBlendRepository _teaBlendFactory;
+
+        public ObservableCollection<CustomCoffee> CustomClasses { get; set; }
+        public ObservableCollection<string> CustomClassNames { get; set; }
+        private readonly Dictionary<string, CustomCoffee> CustomCoffees;
 
         public MainViewModel()
         {
+            CustomClassNames = new ObservableCollection<string>();
+            CustomCoffees = new Dictionary<string, CustomCoffee>();
+            var _ = new CustomClassParser();
+            CustomClasses = _.GetCustomClasses().coffees;
+            foreach (CustomCoffee customCoffee in CustomClasses)
+            {
+                CustomClassNames?.Add(customCoffee.Name);
+                CustomCoffees.Add(customCoffee.Name, new CustomCoffee
+                {
+                    Name = customCoffee.Name,
+                    Price = customCoffee.Price,
+                    steps = customCoffee.steps
+                });
+            }
+
+
             _coffeeStrength = Strength.Normal;
             _sugarAmount = Amount.Normal;
             _milkAmount = Amount.Normal;
@@ -30,7 +56,9 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             SelectedPaymentCardUsername = PaymentCardUsernames[0];
 
             DrinkFactory = new DrinkFactory();
-            AdditionFactory = new AdditionFactory();
+            _teaBlendFactory = new TeaBlendRepository();
+
+            SelectedTea = TeaBlends.First();
 
         }
 
@@ -39,6 +67,8 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
         public string SelectedDrinkName => _selectedDrink?.Name;
 
         public double? SelectedDrinkPrice => _selectedDrink?.Price;
+        public string SelectedTea { get; set; }
+        public string SelectedCustomCoffee { get; set; }
 
         #endregion Drink properties to bind to
 
@@ -178,6 +208,23 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             UpdateDrinkState();
         });
 
+        public ICommand DrinkWithBlendCommand => new RelayCommand<string>((drinkName) =>
+        {
+            _selectedDrink = DrinkFactory.MixDrink(drinkName, null, null, null, _teaBlendFactory.GetTeaBlend(SelectedTea));
+            UpdateDrinkState();
+        });
+
+        public ICommand DrinkWithBlendAndSugarCommand => new RelayCommand<string>((drinkName) =>
+        {
+            _selectedDrink = DrinkFactory.MixDrink(drinkName, SugarAmount, null, null, _teaBlendFactory.GetTeaBlend(SelectedTea));
+            UpdateDrinkState();
+        });
+        public ICommand CustomDrinkCommand => new RelayCommand<string>((ok) =>
+        {
+            string drinkName = SelectedCustomCoffee;
+            _selectedDrink = DrinkFactory.MixDrink("Custom", null, null, null, null, CustomCoffees[drinkName]);
+            UpdateDrinkState();
+        });
         #endregion Coffee buttons
     }
 }

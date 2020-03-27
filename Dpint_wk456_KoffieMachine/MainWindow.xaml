@@ -7,8 +7,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:helpers="clr-namespace:Dpint_wk456_KoffieMachine.Helpers"
+        xmlns:viewModel="clr-namespace:Dpint_wk456_KoffieMachine.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="620" Width="900"
+        Title="MainWindow" Height="781" Width="900"
         DataContext="{Binding Main, Source={StaticResource Locator }}">
     <Window.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBool"/>
@@ -129,15 +130,20 @@
             <Separator />
             <Label Content="Tea" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal" Name="TeaPanel" HorizontalAlignment="Center" Margin="5">
-                <Button Command="{Binding DrinkCommand}" CommandParameter="Tea" Style="{StaticResource DrinkButton}">
+                <Button Command="{Binding DrinkWithBlendCommand}" CommandParameter="Tea" Style="{StaticResource DrinkButton}">
                     <TextBlock>Tea</TextBlock>
                 </Button>
-                <Button Command="{Binding DrinkWithSugarCommand}" CommandParameter="Tea" Style="{StaticResource DrinkButton}">
+                <Button Command="{Binding DrinkWithBlendAndSugarCommand}" CommandParameter="Tea" Style="{StaticResource DrinkButton}">
                     <TextBlock>Tea + sugar</TextBlock>
                 </Button>
-                <TextBlock TextWrapping="WrapWithOverflow" Width="250">How to choose your teablend? //TODO: Make this work!</TextBlock>
+                <TextBlock TextWrapping="WrapWithOverflow" Width="250"></TextBlock>
             </StackPanel>
         </StackPanel>
+        <ComboBox SelectedValue="{Binding SelectedTea}" ItemsSource="{Binding TeaBlends}" Width="100" Margin="194,523,152,180" Grid.Column="1"></ComboBox>
+        <ComboBox SelectedValue="{Binding SelectedCustomCoffee}" ItemsSource="{Binding CustomClassNames}" Margin="10,575,139,148" Grid.Column="1" />
+        <Button Command="{Binding CustomDrinkCommand}" CommandParameter="{Binding SelectedCustomCoffee}" Grid.Column="1" Margin="10,607,139,0" Height="62" Width="Auto">
+            <TextBlock>Order custom coffee!</TextBlock>
+        </Button>
         <StackPanel Grid.Column="2" Orientation="Vertical" Margin="5" Name="Payment">
             <Label HorizontalAlignment="Center" FontSize="14">Payment by card</Label>
             <TextBlock HorizontalAlignment="Center" TextWrapping="WrapWithOverflow">Enter the username on your card:</TextBlock>
