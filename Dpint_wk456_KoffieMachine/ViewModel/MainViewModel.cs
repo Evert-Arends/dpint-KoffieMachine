@@ -49,7 +49,7 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             if (_selectedDrink == null) return;
             LogText.Add($"Inserted {inserted.ToString("C", CultureInfo.CurrentCulture)}, Remaining: {RemainingPriceToPay.ToString("C", CultureInfo.CurrentCulture)}.");
 
-            // Wait for coins
+            // Wait for further payment
             if (RemainingPriceToPay > 0) return;
 
 
@@ -76,6 +76,9 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             RemainingPriceToPay = PaymentFactory
                 .GetPaymentMethodByName("Coin")
                 .Pay(RemainingPriceToPay, coinValue);
+
+            // Log payment and check if the coin is enough.
+            this.LogPayment(coinValue);
         });
 
         public double PaymentCardRemainingAmount =>
@@ -90,7 +93,7 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
         private string _selectedPaymentCardUsername;
         public string SelectedPaymentCardUsername
         {
-            get { return _selectedPaymentCardUsername; }
+            get => _selectedPaymentCardUsername;
             set
             {
                 _selectedPaymentCardUsername = value;
@@ -102,7 +105,7 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
         private double _remainingPriceToPay;
         public double RemainingPriceToPay
         {
-            get { return _remainingPriceToPay; }
+            get => _remainingPriceToPay;
             set { _remainingPriceToPay = value; RaisePropertyChanged(() => RemainingPriceToPay); }
         }
         #endregion Payment
@@ -159,7 +162,6 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             _selectedDrink = AdditionFactory.AddStrength(drink, CoffeeStrength);
             _selectedDrink = AdditionFactory.AddSugar(_selectedDrink, SugarAmount);
 
-            // Call the RaisePropertyChangeds, and add a log.
             RemainingPriceToPay = _selectedDrink.GetPrice() + Drink.SugarPrice;
             this.Update($"Selected {_selectedDrink.Name} with sugar, price: {RemainingPriceToPay.ToString("C", CultureInfo.CurrentCulture)}");
         });

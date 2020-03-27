@@ -27,7 +27,7 @@ namespace Dpint_wk456_KoffieMachine.Factories
 
             _payments = new Dictionary<string, IPayment>
             {
-                ["Coins"] = new CashPayment(),
+                ["Coin"] = new CashPayment(),
                 ["Card"] = new PinPayment()
             };
         }

@@ -2,46 +2,16 @@
 
 namespace KoffieMachineDomain
 {
-    public class Coffee : Drink, IStrength, ISugar, IMilk
+    public class Coffee : Drink
     {
-        private Strength _drinkStrength;
-
-        public virtual bool HasSugar { get; set; }
-        public virtual Amount SugarAmount { get; set; }
-        public virtual bool HasMilk { get; set; }
-        public virtual Amount MilkAmount { get; set; }
-
-        public Strength DrinkStrength
+        public Coffee()
         {
-            get => _drinkStrength;
-            set => _drinkStrength = value;
-        }
-
-        public override string Name => "Koffie";
-
-        public override double GetPrice()
-        {
-            return BaseDrinkPrice;
+            Name = "Coffee";
         }
 
         public override void LogDrinkMaking(ICollection<string> log)
         {
-            base.LogDrinkMaking(log);
-            log.Add($"Setting coffee strength to {DrinkStrength}.");
-            log.Add("Filling with coffee...");
-
-            if (HasSugar)
-            {
-                log.Add($"Setting sugar amount to {SugarAmount}.");
-                log.Add("Adding sugar...");
-            }
-
-            if (HasMilk)
-            {
-                log.Add($"Setting milk amount to {MilkAmount}.");
-                log.Add("Adding milk...");
-            }
-
+            LogStartMaking(log);
             log.Add($"Finished making {Name}");
         }
     }

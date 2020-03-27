@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KoffieMachineDomain
 {
-    public class Espresso : Drink, IMilk, ISugar
+    public class Espresso : Drink, IMilk, ISugar, IStrength
     {
         public override string Name => "Espresso";
         public virtual bool HasSugar { get; set; }
@@ -16,6 +16,7 @@ namespace KoffieMachineDomain
 
         public override double GetPrice()
         {
+            DrinkStrength = Strength.Normal;
             return BaseDrinkPrice + 0.7;
         }
 
@@ -36,5 +37,7 @@ namespace KoffieMachineDomain
             log.Add("Adding milk to coffee...");
             log.Add($"Finished making {Name}");
         }
+
+        public Strength DrinkStrength { get; set; }
     }
 }

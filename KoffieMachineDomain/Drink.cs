@@ -4,15 +4,20 @@ namespace KoffieMachineDomain
 {
     public abstract class Drink : IDrink
     {
-        public static readonly double SugarPrice = 0.1;
-        public static readonly double MilkPrice = 0.15;
+        public string Name { get; set; }
+        public double Price { get; set; }
 
-        protected const double BaseDrinkPrice = 1.0;
-
-        public abstract string Name { get; }    
-        public abstract double GetPrice();
+        protected Drink()
+        {
+            Price = 1;
+        }
 
         public virtual void LogDrinkMaking(ICollection<string> log)
+        {
+
+        }
+
+        protected void LogStartMaking(ICollection<string> log)
         {
             log.Add($"Making {Name}...");
             log.Add($"Heating up...");

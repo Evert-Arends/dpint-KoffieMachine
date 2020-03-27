@@ -41,11 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Amount.cs" />
+    <Compile Include="BaseDrinkDecorator.cs" />
     <Compile Include="CafeAuLait.cs" />
     <Compile Include="Capuccino.cs" />
     <Compile Include="CashPayment.cs" />
     <Compile Include="IPayment.cs" />
+    <Compile Include="MilkDrinkDecorator.cs" />
     <Compile Include="PinPayment.cs" />
+    <Compile Include="StrengthDrinkDecorator.cs" />
+    <Compile Include="SugarDrinkDecorator.cs" />
     <Compile Include="Tea.cs" />
     <Compile Include="Coffee.cs" />
     <Compile Include="Drink.cs" />

@@ -4,8 +4,9 @@ namespace KoffieMachineDomain
 {
     public interface IDrink
     {
-        string Name { get; }
-        double GetPrice();
+        string Name { get; set; }
+        double Price { get; set; }
+
         void LogDrinkMaking(ICollection<string> log);
     }
 }

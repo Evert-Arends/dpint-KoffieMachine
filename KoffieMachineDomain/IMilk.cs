@@ -10,5 +10,6 @@ namespace KoffieMachineDomain
     {
         bool HasMilk { get; set; }
         Amount MilkAmount { get; set; }
+
     }
 }
