@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KoffieMachineDomain
 {
-    class SugarDrinkDecorator : BaseDrinkDecorator
+    public class SugarDrinkDecorator : BaseDrinkDecorator
     {
 
         public Amount Sugar { get; set; }
@@ -15,9 +15,9 @@ namespace KoffieMachineDomain
             Sugar = sugar;
             Price += 0.1; // Sugar
         }
-        public override void LogDrinkMaking(ICollection<string> log)
+        public override void LogStartDrink(ICollection<string> log)
         {
-            base.LogDrinkMaking(log);
+            base.LogStartDrink(log);
             log.Add($"Setting sugar amount to {Sugar}.");
             log.Add("Adding sugar...");
         }

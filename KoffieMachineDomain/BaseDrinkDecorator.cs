@@ -6,30 +6,30 @@ using System.Threading.Tasks;
 
 namespace KoffieMachineDomain
 {
-    class BaseDrinkDecorator : IDrink
+    public class BaseDrinkDecorator : IDrink
     {
-        public IDrink drink;
+        public IDrink Drink;
 
         public string Name
         {
-            get => drink.Name;
-            set => drink.Name = value;
+            get => Drink.Name;
+            set => Drink.Name = value;
         }
 
         public double Price
         {
-            get => drink.Price;
-            set => drink.Price = value;
+            get => Drink.Price;
+            set => Drink.Price = value;
         }
 
         public BaseDrinkDecorator(IDrink drink)
         {
-            this.drink = drink;
+            this.Drink = drink;
         }
 
-        public virtual void LogDrinkMaking(ICollection<string> log)
+        public virtual void LogStartDrink(ICollection<string> log)
         {
-            drink.LogDrinkMaking(log);
+            Drink.LogStartDrink(log);
         }
     }
 }

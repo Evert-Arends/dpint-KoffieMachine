@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KoffieMachineDomain
 {
-    class StrengthDrinkDecorator : BaseDrinkDecorator
+    public class StrengthDrinkDecorator : BaseDrinkDecorator
     {
     
         public Strength Strength { get; set; }
@@ -16,10 +16,10 @@ namespace KoffieMachineDomain
             Strength = strength;
         }
 
-        public override void LogDrinkMaking(ICollection<string> log)
+        public override void LogStartDrink(ICollection<string> log)
         {
-            base.LogDrinkMaking(log);
             log.Add($"Setting strength to {Strength}.");
+            base.LogStartDrink(log);
         }
         
     }

@@ -8,16 +8,16 @@ namespace KoffieMachineDomain
 {
     public class CafeAuLait : Drink
     {
-        public override string Name => "Café au Lait";
-
-        public override double GetPrice()
+        public CafeAuLait()
         {
-            return BaseDrinkPrice + 0.5;
+            Name = "CafeAuLait";
+            Price += 0.5;
         }
 
-        public override void LogDrinkMaking(ICollection<string> log)
+        public override void LogStartDrink(ICollection<string> log)
         {
-            base.LogDrinkMaking(log);
+            LogStartMaking(log);
+            base.LogStartDrink(log);
             log.Add("Filling half with coffee...");
             log.Add("Filling other half with milk...");
             log.Add($"Finished making {Name}");

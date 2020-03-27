@@ -7,6 +7,6 @@ namespace KoffieMachineDomain
         string Name { get; set; }
         double Price { get; set; }
 
-        void LogDrinkMaking(ICollection<string> log);
+        void LogStartDrink(ICollection<string> log);
     }
 }

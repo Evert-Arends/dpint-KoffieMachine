@@ -38,7 +38,7 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
         private IDrink _selectedDrink;
         public string SelectedDrinkName => _selectedDrink?.Name;
 
-        public double? SelectedDrinkPrice => _selectedDrink?.GetPrice();
+        public double? SelectedDrinkPrice => _selectedDrink?.Price;
 
         #endregion Drink properties to bind to
 
@@ -53,7 +53,7 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             if (RemainingPriceToPay > 0) return;
 
 
-            _selectedDrink.LogDrinkMaking(LogText);
+            _selectedDrink.LogStartDrink(LogText);
             LogText.Add("------------------");
             _selectedDrink = null;
         }
@@ -132,67 +132,50 @@ namespace Dpint_wk456_KoffieMachine.ViewModel
             set { _milkAmount = value; RaisePropertyChanged(() => MilkAmount); }
         }
 
-        private void Update(string log)
+        private void Update()
         {
-            LogText.Add(log);
             RaisePropertyChanged(() => RemainingPriceToPay);
             RaisePropertyChanged(() => SelectedDrinkName);
             RaisePropertyChanged(() => SelectedDrinkPrice);
         }
 
+        private void LogSelectedDrink()
+        {
+            LogText.Add($"Selected {_selectedDrink.Name}, price: {RemainingPriceToPay.ToString("C", CultureInfo.CurrentCulture)}");
+        }
+
+        private void UpdateDrinkState()
+        {
+            if (_selectedDrink != null)
+            {
+                RemainingPriceToPay = _selectedDrink.Price;
+                LogSelectedDrink();
+                this.Update();
+            }
+        }
+
         public ICommand DrinkCommand => new RelayCommand<string>((drinkName) =>
         {
-            _selectedDrink = null;
-            IDrink drink = this.DrinkFactory.GetDrink(drinkName);
-            // Add strength to the drinks who have the IStrength type
-            _selectedDrink = AdditionFactory.AddStrength(drink, CoffeeStrength);
-            RemainingPriceToPay = _selectedDrink.GetPrice();
-            // Call the RaisePropertyChangeds, and add a log.
-            this.Update($"Selected {_selectedDrink.Name}, price: {RemainingPriceToPay.ToString("C", CultureInfo.CurrentCulture)}");
+            _selectedDrink = DrinkFactory.MixDrink(drinkName, null, null, CoffeeStrength);
+            UpdateDrinkState();
         });
-
 
         public ICommand DrinkWithSugarCommand => new RelayCommand<string>((drinkName) =>
         {
-            _selectedDrink = null;
-            RemainingPriceToPay = 0;
-            IDrink drink = this.DrinkFactory.GetDrink(drinkName);
-
-            // Add strength to the drinks who have the IStrength type
-            _selectedDrink = AdditionFactory.AddStrength(drink, CoffeeStrength);
-            _selectedDrink = AdditionFactory.AddSugar(_selectedDrink, SugarAmount);
-
-            RemainingPriceToPay = _selectedDrink.GetPrice() + Drink.SugarPrice;
-            this.Update($"Selected {_selectedDrink.Name} with sugar, price: {RemainingPriceToPay.ToString("C", CultureInfo.CurrentCulture)}");
+            _selectedDrink = DrinkFactory.MixDrink(drinkName, SugarAmount, null, CoffeeStrength);
+            UpdateDrinkState();
         });
 
         public ICommand DrinkWithMilkCommand => new RelayCommand<string>((drinkName) =>
         {
-            _selectedDrink = null;
-            IDrink drink = this.DrinkFactory.GetDrink(drinkName);
-
-            // Add extra's to the drinks who have the required type.
-            _selectedDrink = AdditionFactory.AddStrength(drink, CoffeeStrength);
-            _selectedDrink = AdditionFactory.AddMilk(drink, MilkAmount);
-
-            if (_selectedDrink == null) return;
-            RemainingPriceToPay = _selectedDrink.GetPrice() + Drink.MilkPrice;
-
-            this.Update($"Selected {_selectedDrink.Name} with milk, price: {RemainingPriceToPay}");
+            _selectedDrink = DrinkFactory.MixDrink(drinkName, null, MilkAmount, CoffeeStrength);
+            UpdateDrinkState();
         });
 
         public ICommand DrinkWithSugarAndMilkCommand => new RelayCommand<string>((drinkName) =>
         {
-            _selectedDrink = null;
-            IDrink drink = this.DrinkFactory.GetDrink(drinkName);
-
-            // Add all the extra's to the drinks who have the required type.
-            _selectedDrink = AdditionFactory.AddAll(drink, CoffeeStrength, MilkAmount, SugarAmount);
-
-            if (_selectedDrink == null) return;
-            RemainingPriceToPay = _selectedDrink.GetPrice() + Drink.SugarPrice + Drink.MilkPrice;
-
-            this.Update($"Selected {_selectedDrink.Name} with sugar and milk, price: {RemainingPriceToPay}");
+            _selectedDrink = DrinkFactory.MixDrink(drinkName, SugarAmount, MilkAmount, CoffeeStrength);
+            UpdateDrinkState();
         });
 
         #endregion Coffee buttons

@@ -12,7 +12,7 @@ namespace KoffieMachineDomain
             Price = 1;
         }
 
-        public virtual void LogDrinkMaking(ICollection<string> log)
+        public virtual void LogStartDrink(ICollection<string> log)
         {
 
         }

@@ -9,10 +9,11 @@ namespace KoffieMachineDomain
             Name = "Coffee";
         }
 
-        public override void LogDrinkMaking(ICollection<string> log)
+        public override void LogStartDrink(ICollection<string> log)
         {
             LogStartMaking(log);
             log.Add($"Finished making {Name}");
+
         }
     }
 }
